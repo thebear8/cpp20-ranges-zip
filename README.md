@@ -1,5 +1,5 @@
-# A C++20 zip_view for two ranges, similar to C++23 std::ranges zip_view
-Since there is still very little compiler support for std::ranges::zip_view, I built this replacement. It currently only handles two ranges.
+# A C++20 zip_view for two ranges, similar to C++23 `std::ranges::zip_view`
+Since there is still very little compiler support for `std::ranges::zip_view`, I built this replacement. It currently only handles two ranges.
 
 ## Example
 ```c++
