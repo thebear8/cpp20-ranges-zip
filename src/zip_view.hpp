@@ -27,14 +27,6 @@ private:
 
 public:
     zip_view() = default;
-    zip_view(Rng1&& rng1, Rng2&& rng2)
-        : m_rng1_begin(std::begin(rng1)),
-          m_rng1_end(std::end(rng1)),
-          m_rng2_begin(std::begin(rng2)),
-          m_rng2_end(std::end(rng2))
-    {
-    }
-
     zip_view(Rng1 const& rng1, Rng2 const& rng2)
         : m_rng1_begin(std::begin(rng1)),
           m_rng1_end(std::end(rng1)),
@@ -57,9 +49,7 @@ public:
 };
 
 template<typename Rng1, typename Rng2>
-zip_view(
-    Rng1&& rng1, Rng2&& rng2
-) -> zip_view<std::ranges::views::all_t<Rng1>, std::ranges::views::all_t<Rng2>>;
+zip_view(Rng1 const&, Rng2 const&) -> zip_view<Rng1, Rng2>;
 
 template<std::ranges::input_range Rng1, std::ranges::input_range Rng2>
     requires std::ranges::view<Rng1> && std::ranges::view<Rng2>
@@ -117,14 +107,14 @@ public:
     const_reference operator->() const { return reference(*m_it1, *m_it2); }
 };
 
-static_assert((bool)std::input_iterator<zip_view<
-                  std::views::all_t<std::vector<int>>,
-                  std::views::all_t<std::vector<int>>>::iterator>);
+static_assert(std::input_iterator<zip_view<
+                  std::ranges::ref_view<std::vector<int>>,
+                  std::ranges::ref_view<std::vector<int>>>::iterator>);
 
-static_assert((bool)std::ranges::input_range<zip_view<
-                  std::views::all_t<std::vector<int>>,
-                  std::views::all_t<std::vector<int>>>>);
+static_assert(std::ranges::input_range<zip_view<
+                  std::ranges::ref_view<std::vector<int>>,
+                  std::ranges::ref_view<std::vector<int>>>>);
 
-static_assert((bool)std::ranges::view<zip_view<
-                  std::views::all_t<std::vector<int>>,
-                  std::views::all_t<std::vector<int>>>>);
+static_assert(std::ranges::view<zip_view<
+                  std::ranges::ref_view<std::vector<int>>,
+                  std::ranges::ref_view<std::vector<int>>>>);
